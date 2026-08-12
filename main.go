@@ -2,43 +2,50 @@ package main
 
 import "fmt"
 
-func main() {
-	// Deklarasi variabel dasar
-	var nama string = "Alfin"
-	var umur int = 20
-	var ipk float64 = 3.85
-	var statusAktif bool = true
-	var hobi = []string{"Coding", "Naik Gunung"}
+// Menukar nilai dua variabel dengan pointer
+func swap(a *int, b *int) {
+	temp := *a
+	*a = *b
+	*b = temp
+}
 
-	fmt.Println("=== Data Mahasiswa ===")
-	fmt.Println("Nama:", nama)
-	fmt.Println("Umur:", umur)
-	fmt.Println("IPK:", ipk)
-	fmt.Println("Status Aktif:", statusAktif)
-	fmt.Println("Hobi:", hobi)
+// Menambahkan item baru ke slice lewat pointer
+func updateSlice(slice *[]string, itemBaru string) {
+	*slice = append(*slice, itemBaru)
+}
+
+// Pass by value (tidak mengubah nilai asli)
+func tambahSatuValue(n int) {
+	n = n + 1
+}
+
+// Pass by pointer (mengubah nilai asli)
+func tambahSatuPointer(n *int) {
+	*n = *n + 1
+}
+
+func main() {
+	// Uji fungsi swap
+	x, y := 10, 20
+	fmt.Println("Sebelum swap:", x, y)
+	swap(&x, &y)
+	fmt.Println("Setelah swap :", x, y)
 	fmt.Println()
 
-	// Inisialisasi map nilai
-	nilaiMhs := map[string]int{
-		"Budi": 85,
-		"Siti": 90,
-	}
+	// Uji updateSlice
+	daftarHobi := []string{"Coding", "Trekking"}
+	fmt.Println("Slice awal :", daftarHobi)
+	updateSlice(&daftarHobi, "Membaca")
+	fmt.Println("Slice akhir:", daftarHobi)
+	fmt.Println()
 
-	// Tambah data baru
-	nilaiMhs["Andi"] = 78
+	// Uji pass by value vs pointer
+	angka := 5
+	fmt.Println("Nilai awal angka:", angka)
 
-	// Cek keberadaan data
-	nilai, ada := nilaiMhs["Siti"]
-	if ada {
-		fmt.Println("Nilai Siti adalah:", nilai)
-	}
+	tambahSatuValue(angka)
+	fmt.Println("Setelah pass by value  :", angka)
 
-	// Hapus data
-	delete(nilaiMhs, "Budi")
-
-	// Tampilkan seluruh isi map
-	fmt.Println("\nDaftar Nilai Akhir:")
-	for k, v := range nilaiMhs {
-		fmt.Printf("- %s : %d\n", k, v)
-	}
+	tambahSatuPointer(&angka)
+	fmt.Println("Setelah pass by pointer:", angka)
 }
