@@ -2,50 +2,40 @@ package main
 
 import "fmt"
 
-// Menukar nilai dua variabel dengan pointer
-func swap(a *int, b *int) {
-	temp := *a
-	*a = *b
-	*b = temp
+type Student struct {
+	ID       string
+	Name     string
+	Grade    float64
+	IsActive bool
 }
 
-// Menambahkan item baru ke slice lewat pointer
-func updateSlice(slice *[]string, itemBaru string) {
-	*slice = append(*slice, itemBaru)
+// value receiver buat ambil info
+func (s Student) GetInfo() string {
+	st := "Tidak Aktif"
+	if s.IsActive {
+		st = "Aktif"
+	}
+	return fmt.Sprintf("ID: %s | Nama: %s | Nilai: %.2f | Status: %s", s.ID, s.Name, s.Grade, st)
 }
 
-// Pass by value (tidak mengubah nilai asli)
-func tambahSatuValue(n int) {
-	n = n + 1
+// pointer receiver ubah data
+func (s *Student) UpdateGrade(n float64) {
+	s.Grade = n
 }
-
-// Pass by pointer (mengubah nilai asli)
-func tambahSatuPointer(n *int) {
-	*n = *n + 1
+func (s *Student) Activate() {
+	s.IsActive = true
+}
+func (s *Student) Deactivate() {
+	s.IsActive = false
 }
 
 func main() {
-	// Uji fungsi swap
-	x, y := 10, 20
-	fmt.Println("Sebelum swap:", x, y)
-	swap(&x, &y)
-	fmt.Println("Setelah swap :", x, y)
-	fmt.Println()
-
-	// Uji updateSlice
-	daftarHobi := []string{"Coding", "Trekking"}
-	fmt.Println("Slice awal :", daftarHobi)
-	updateSlice(&daftarHobi, "Membaca")
-	fmt.Println("Slice akhir:", daftarHobi)
-	fmt.Println()
-
-	// Uji pass by value vs pointer
-	angka := 5
-	fmt.Println("Nilai awal angka:", angka)
-
-	tambahSatuValue(angka)
-	fmt.Println("Setelah pass by value  :", angka)
-
-	tambahSatuPointer(&angka)
-	fmt.Println("Setelah pass by pointer:", angka)
+	mhs := Student{ID: "5025211001", Name: "Alfin", Grade: 3.50, IsActive: true}
+	fmt.Println("Data Awal:", mhs.GetInfo())
+	mhs.UpdateGrade(3.85)
+	fmt.Println("Setalah Update Grade:", mhs.GetInfo())
+	mhs.Deactivate()
+	fmt.Println("Setelah Deactivate:", mhs.GetInfo())
+	mhs.Activate()
+	fmt.Println("Setelah Activate:", mhs.GetInfo())
 }
